@@ -1,0 +1,4120 @@
+1
+00:00:00,030 --> 00:00:01,860
+the following content is provided under
+
+2
+00:00:01,860 --> 00:00:04,580
+a Creative Commons license your support
+
+3
+00:00:04,580 --> 00:00:06,870
+will help MIT OpenCourseWare continue to
+
+4
+00:00:06,870 --> 00:00:08,750
+offer high quality educational resources
+
+5
+00:00:08,750 --> 00:00:09,800
+for free
+
+6
+00:00:09,800 --> 00:00:12,210
+to make a donation or view additional
+
+7
+00:00:12,210 --> 00:00:14,420
+materials from hundreds of MIT courses
+
+8
+00:00:14,420 --> 00:00:27,730
+visit MIT opencourseware at ocw.mit.edu
+
+9
+00:00:27,730 --> 00:00:29,660
+okay so today we're going to continue
+
+10
+00:00:29,660 --> 00:00:32,270
+talking about multi-hop networks and in
+
+11
+00:00:32,270 --> 00:00:34,840
+particular I'm going to talk about a
+
+12
+00:00:34,840 --> 00:00:37,250
+fairly fundamental problem in multi
+
+13
+00:00:37,250 --> 00:00:39,070
+health networks called network routing
+
+14
+00:00:39,070 --> 00:00:42,180
+and that's the topic for today and for
+
+15
+00:00:42,180 --> 00:00:45,140
+threw through most of half of next week
+
+16
+00:00:45,140 --> 00:00:48,140
+and today this week we'll talk about
+
+17
+00:00:48,140 --> 00:00:50,570
+network routing in networks where there
+
+18
+00:00:50,570 --> 00:00:53,530
+are no failures so you know in real
+
+19
+00:00:53,530 --> 00:00:55,210
+networks of course things fail packets
+
+20
+00:00:55,210 --> 00:00:57,190
+get dropped nodes may fail switches may
+
+21
+00:00:57,190 --> 00:00:59,290
+fail links may fail we'll just worry
+
+22
+00:00:59,290 --> 00:01:00,550
+about the case when there are no
+
+23
+00:01:00,550 --> 00:01:03,350
+failures for this week next week we'll
+
+24
+00:01:03,350 --> 00:01:05,440
+add some more complexity and talk about
+
+25
+00:01:05,440 --> 00:01:07,600
+how we deal with failures so the
+
+26
+00:01:07,600 --> 00:01:09,170
+abstract problem is pretty simple you
+
+27
+00:01:09,170 --> 00:01:11,590
+have a set of nodes in the network and
+
+28
+00:01:11,590 --> 00:01:26,730
+there's some network topology
+
+29
+00:01:26,730 --> 00:01:29,950
+and every source in the network you know
+
+30
+00:01:29,950 --> 00:01:30,930
+you have sources and you have
+
+31
+00:01:30,930 --> 00:01:32,590
+destinations loads in the network and
+
+32
+00:01:32,590 --> 00:01:35,000
+they wish to send packets to each other
+
+33
+00:01:35,000 --> 00:01:37,260
+and we're going to decompose this
+
+34
+00:01:37,260 --> 00:01:42,510
+problem these endpoints which actually
+
+35
+00:01:42,510 --> 00:01:43,620
+want you to want to communicate with
+
+36
+00:01:43,620 --> 00:01:45,210
+each other as we've already talked about
+
+37
+00:01:45,210 --> 00:01:48,180
+do so by sending packets via switches
+
+38
+00:01:48,180 --> 00:01:51,090
+and the problem we're going to worry
+
+39
+00:01:51,090 --> 00:01:55,890
+about is what happens inside the network
+
+40
+00:01:55,890 --> 00:02:00,030
+in these switches the switches solved
+
+41
+00:02:00,030 --> 00:02:02,790
+the following problem if things work
+
+42
+00:02:02,790 --> 00:02:05,340
+correctly and if things work well when a
+
+43
+00:02:05,340 --> 00:02:08,310
+switch receives a packet with the
+
+44
+00:02:08,310 --> 00:02:10,650
+destination address specifying that that
+
+45
+00:02:10,650 --> 00:02:12,480
+packet has to be sent to a particular
+
+46
+00:02:12,480 --> 00:02:14,910
+named destination in the network the
+
+47
+00:02:14,910 --> 00:02:17,130
+switch figures are how to ship that
+
+48
+00:02:17,130 --> 00:02:19,230
+packet it figures out whether to send it
+
+49
+00:02:19,230 --> 00:02:22,090
+along I need a better topology here it's
+
+50
+00:02:22,090 --> 00:02:23,620
+sugarstar this switch for example
+
+51
+00:02:23,620 --> 00:02:25,360
+figures out whether a package should go
+
+52
+00:02:25,360 --> 00:02:27,840
+along that link or this link or this
+
+53
+00:02:27,840 --> 00:02:30,840
+link or this link or that link given any
+
+54
+00:02:30,840 --> 00:02:32,880
+packet that receives and every switch in
+
+55
+00:02:32,880 --> 00:02:37,020
+the network performs this task
+
+56
+00:02:37,020 --> 00:02:40,250
+now when a switch gets a packet and the
+
+57
+00:02:40,250 --> 00:02:42,710
+packet has the destination address in it
+
+58
+00:02:42,710 --> 00:02:45,870
+what the switch does is some sort of a
+
+59
+00:02:45,870 --> 00:02:50,060
+lookup it looks up that destination in
+
+60
+00:02:50,060 --> 00:02:52,770
+some sort of a table and that table
+
+61
+00:02:52,770 --> 00:02:55,940
+maintains information about which of the
+
+62
+00:02:55,940 --> 00:02:59,870
+links to use in sending that packet
+
+63
+00:02:59,870 --> 00:03:02,550
+toward the destination and this step is
+
+64
+00:03:02,550 --> 00:03:10,970
+called forwarding
+
+65
+00:03:10,970 --> 00:03:14,810
+packets are forwarded by switches
+
+66
+00:03:14,810 --> 00:03:16,870
+technically packets aren't routed
+
+67
+00:03:16,870 --> 00:03:18,750
+everybody says packet routing and I say
+
+68
+00:03:18,750 --> 00:03:20,740
+too but it's important to realize
+
+69
+00:03:20,740 --> 00:03:22,440
+packets aren't drought at packets are
+
+70
+00:03:22,440 --> 00:03:25,960
+forwarded the fumbling process is pretty
+
+71
+00:03:25,960 --> 00:03:28,360
+straightforward at slow speeds you get a
+
+72
+00:03:28,360 --> 00:03:30,660
+packet you take the destination you look
+
+73
+00:03:30,660 --> 00:03:33,400
+up that packet in a table and that table
+
+74
+00:03:33,400 --> 00:03:35,020
+tells you what you do with the packet
+
+75
+00:03:35,020 --> 00:03:39,610
+which link to use routing is the problem
+
+76
+00:03:39,610 --> 00:03:41,580
+that the switch is solved of
+
+77
+00:03:41,580 --> 00:03:44,220
+constructing these tables so forwarding
+
+78
+00:03:44,220 --> 00:03:50,400
+is simply look up in a table and the
+
+79
+00:03:50,400 --> 00:03:54,560
+table is called the routing table
+
+80
+00:03:54,560 --> 00:03:56,220
+sometimes it's also called the
+
+81
+00:03:56,220 --> 00:03:57,720
+forwarding table and there's a technical
+
+82
+00:03:57,720 --> 00:03:59,080
+difference between them that's not that
+
+83
+00:03:59,080 --> 00:04:01,060
+important for us so forwarding is the
+
+84
+00:04:01,060 --> 00:04:06,490
+process of looking up the destination in
+
+85
+00:04:06,490 --> 00:04:08,650
+the routing table routing is the
+
+86
+00:04:08,650 --> 00:04:10,650
+distributed process the algorithm that's
+
+87
+00:04:10,650 --> 00:04:12,610
+used or the protocol that's used to
+
+88
+00:04:12,610 --> 00:04:14,680
+build up these routing tables so it's
+
+89
+00:04:14,680 --> 00:04:17,560
+the construction process how to
+
+90
+00:04:17,560 --> 00:04:20,880
+construct these routing tables at each
+
+91
+00:04:20,880 --> 00:04:24,040
+switch in the network
+
+92
+00:04:24,040 --> 00:04:25,990
+that's done in the background that's
+
+93
+00:04:25,990 --> 00:04:28,360
+usually done in software switches that
+
+94
+00:04:28,360 --> 00:04:30,220
+high-speeds involve a fair amount of
+
+95
+00:04:30,220 --> 00:04:32,430
+hardware routing itself is usually done
+
+96
+00:04:32,430 --> 00:04:37,830
+in software and so a typical switch you
+
+97
+00:04:37,830 --> 00:04:39,430
+know has a lot of different processing
+
+98
+00:04:39,430 --> 00:04:41,310
+elements in it a lot of those processing
+
+99
+00:04:41,310 --> 00:04:43,080
+elements are high speed hardware that
+
+100
+00:04:43,080 --> 00:04:44,940
+deals with the process of forwarding and
+
+101
+00:04:44,940 --> 00:04:46,890
+then you have software sitting on the
+
+102
+00:04:46,890 --> 00:04:49,980
+side where all of the complexity is and
+
+103
+00:04:49,980 --> 00:04:52,770
+all that complexity deals with all sorts
+
+104
+00:04:52,770 --> 00:04:54,690
+of complicated rules that you have to
+
+105
+00:04:54,690 --> 00:04:56,350
+come up with in order to decide how to
+
+106
+00:04:56,350 --> 00:04:58,360
+construct these routing tables and we're
+
+107
+00:04:58,360 --> 00:04:59,560
+going to talk about the world's simplest
+
+108
+00:04:59,560 --> 00:05:02,170
+networks today where and you'll find
+
+109
+00:05:02,170 --> 00:05:03,100
+that even that's reasonably
+
+110
+00:05:03,100 --> 00:05:06,610
+sophisticated and complicated so just
+
+111
+00:05:06,610 --> 00:05:09,250
+for concreteness an example of a picture
+
+112
+00:05:09,250 --> 00:05:12,160
+of a topology is like this and for
+
+113
+00:05:12,160 --> 00:05:13,950
+reasons that will become apparent as we
+
+114
+00:05:13,950 --> 00:05:16,200
+talk this through will model the network
+
+115
+00:05:16,200 --> 00:05:18,750
+as a set of nodes and a set of links and
+
+116
+00:05:18,750 --> 00:05:20,560
+so far there's nothing new about this
+
+117
+00:05:20,560 --> 00:05:23,110
+but will model links as having the cost
+
+118
+00:05:23,110 --> 00:05:26,880
+and this cost might reflect for example
+
+119
+00:05:26,880 --> 00:05:29,580
+the delay or latency to send a packet
+
+120
+00:05:29,580 --> 00:05:31,870
+along that link the cost might reflect
+
+121
+00:05:31,870 --> 00:05:34,810
+the real dollar cost of shipping data
+
+122
+00:05:34,810 --> 00:05:37,180
+along links internet service providers
+
+123
+00:05:37,180 --> 00:05:38,370
+might charge different amounts of money
+
+124
+00:05:38,370 --> 00:05:39,890
+for different types of data for example
+
+125
+00:05:39,890 --> 00:05:42,670
+well the cost might just reflect your
+
+126
+00:05:42,670 --> 00:05:45,120
+own internal preferences as to which
+
+127
+00:05:45,120 --> 00:05:47,580
+links you might prefer based on whatever
+
+128
+00:05:47,580 --> 00:05:49,480
+concerns maybe some links are slow and
+
+129
+00:05:49,480 --> 00:05:50,860
+some links are fast maybe they're higher
+
+130
+00:05:50,860 --> 00:05:52,890
+speed link slower speed links that cost
+
+131
+00:05:52,890 --> 00:05:55,300
+more or less etc so these costs are
+
+132
+00:05:55,300 --> 00:05:57,060
+abstract numbers and we'll just assume
+
+133
+00:05:57,060 --> 00:05:59,560
+that we're interested in finding minimum
+
+134
+00:05:59,560 --> 00:06:02,580
+cost paths between senders and receivers
+
+135
+00:06:02,580 --> 00:06:05,010
+so every switch solves the problem of
+
+136
+00:06:05,010 --> 00:06:07,870
+finding the minimum cost path to a
+
+137
+00:06:07,870 --> 00:06:10,480
+destination where the cost along a path
+
+138
+00:06:10,480 --> 00:06:12,570
+is simply the sum of the costs along the
+
+139
+00:06:12,570 --> 00:06:15,450
+links on that path this is just standard
+
+140
+00:06:15,450 --> 00:06:18,310
+shortest path routing will use shortest
+
+141
+00:06:18,310 --> 00:06:19,620
+paths even though we don't mean
+
+142
+00:06:19,620 --> 00:06:21,270
+literally the shortest number of hops
+
+143
+00:06:21,270 --> 00:06:23,580
+but the minimum cost path and where that
+
+144
+00:06:23,580 --> 00:06:25,180
+distinction is important between the
+
+145
+00:06:25,180 --> 00:06:27,810
+number of hops and the cost etc we'll
+
+146
+00:06:27,810 --> 00:06:31,560
+five so if there aren't cable looks
+
+147
+00:06:31,560 --> 00:06:33,440
+something like this in fact it looks
+
+148
+00:06:33,440 --> 00:06:34,180
+like this
+
+149
+00:06:34,180 --> 00:06:36,620
+there's destination every switch has
+
+150
+00:06:36,620 --> 00:06:38,000
+this so this is an example of a round
+
+151
+00:06:38,000 --> 00:06:41,630
+table at load B node B maintains all the
+
+152
+00:06:41,630 --> 00:06:43,010
+destinations in the network and we're
+
+153
+00:06:43,010 --> 00:06:44,730
+dealing with small networks so far in
+
+154
+00:06:44,730 --> 00:06:46,680
+our class so we'll just assume that
+
+155
+00:06:46,680 --> 00:06:48,480
+every node in the network has a unique
+
+156
+00:06:48,480 --> 00:06:52,110
+name or a unique address and that the
+
+157
+00:06:52,110 --> 00:06:53,610
+destination that the routing tables
+
+158
+00:06:53,610 --> 00:06:55,520
+contain an entry for every destination
+
+159
+00:06:55,520 --> 00:06:57,620
+in the network so the arm table has
+
+160
+00:06:57,620 --> 00:07:00,060
+three columns it's a database with three
+
+161
+00:07:00,060 --> 00:07:02,120
+columns and every switch in the network
+
+162
+00:07:02,120 --> 00:07:03,750
+or a node I'm going to use the word node
+
+163
+00:07:03,750 --> 00:07:05,630
+and switch interchangeably every switch
+
+164
+00:07:05,630 --> 00:07:06,990
+or node in the network has one of these
+
+165
+00:07:06,990 --> 00:07:09,200
+if the network is working correctly so
+
+166
+00:07:09,200 --> 00:07:10,430
+if there aren't protocol that what does
+
+167
+00:07:10,430 --> 00:07:12,680
+this job every node comes up with its
+
+168
+00:07:12,680 --> 00:07:14,040
+own version of this table there's a
+
+169
+00:07:14,040 --> 00:07:16,290
+destination there's the link you need to
+
+170
+00:07:16,290 --> 00:07:19,500
+use that is the next hop if you get a
+
+171
+00:07:19,500 --> 00:07:22,010
+packet to this destination what link
+
+172
+00:07:22,010 --> 00:07:24,470
+would you use and a cost so in this
+
+173
+00:07:24,470 --> 00:07:27,890
+table if node B or switch B received a
+
+174
+00:07:27,890 --> 00:07:31,010
+packet destined for destination a it
+
+175
+00:07:31,010 --> 00:07:34,190
+would use link l1 each link is named
+
+176
+00:07:34,190 --> 00:07:36,870
+locally so B would have its own l0 l2
+
+177
+00:07:36,870 --> 00:07:38,660
+and l1 you know your own computer has a
+
+178
+00:07:38,660 --> 00:07:41,060
+bunch of links if you do I don't know
+
+179
+00:07:41,060 --> 00:07:42,200
+how what the command is in Windows but
+
+180
+00:07:42,200 --> 00:07:44,330
+in all other sensible platforms if you
+
+181
+00:07:44,330 --> 00:07:46,910
+do I have conveyed you can you can get I
+
+182
+00:07:46,910 --> 00:07:48,240
+think it's called IP config under
+
+183
+00:07:48,240 --> 00:07:49,940
+windows but you can actually see a list
+
+184
+00:07:49,940 --> 00:07:51,750
+of links so switches have many many many
+
+185
+00:07:51,750 --> 00:07:54,020
+links and so you'll find for example for
+
+186
+00:07:54,020 --> 00:07:56,490
+destination a you use link l1 the cost
+
+187
+00:07:56,490 --> 00:07:59,370
+is 18 in fact you'll see here that when
+
+188
+00:07:59,370 --> 00:08:01,640
+when B receives a packet for a it
+
+189
+00:08:01,640 --> 00:08:03,320
+doesn't use the direct link because the
+
+190
+00:08:03,320 --> 00:08:05,510
+direct link has a cost of 19 whereas
+
+191
+00:08:05,510 --> 00:08:08,100
+going through l1 this link has the cost
+
+192
+00:08:08,100 --> 00:08:11,610
+of 11 and if it believes if B believes
+
+193
+00:08:11,610 --> 00:08:14,430
+that this the path toward a along this
+
+194
+00:08:14,430 --> 00:08:16,430
+link has a cost of elemental 7 is 18
+
+195
+00:08:16,430 --> 00:08:17,850
+that's what it thinks and therefore it
+
+196
+00:08:17,850 --> 00:08:21,490
+would use that link
+
+197
+00:08:21,490 --> 00:08:24,800
+okay it's very simple now routing is the
+
+198
+00:08:24,800 --> 00:08:26,140
+process by which these different nodes
+
+199
+00:08:26,140 --> 00:08:27,640
+talk to each other and build up these
+
+200
+00:08:27,640 --> 00:08:31,660
+tables when I say a route to a
+
+201
+00:08:31,660 --> 00:08:35,260
+destination I mean this I mean the route
+
+202
+00:08:35,260 --> 00:08:37,820
+to a destination at a switch or at a
+
+203
+00:08:37,820 --> 00:08:40,780
+node is the link that that destination
+
+204
+00:08:40,780 --> 00:08:42,950
+would use to send packets to the
+
+205
+00:08:42,950 --> 00:08:45,620
+destination this is important
+
+206
+00:08:45,620 --> 00:08:47,620
+technically for us because otherwise we
+
+207
+00:08:47,620 --> 00:08:49,120
+will get all tangled up getting confused
+
+208
+00:08:49,120 --> 00:08:53,050
+between routes and paths okay for the
+
+209
+00:08:53,050 --> 00:08:54,880
+purposes of our discussion a route is
+
+210
+00:08:54,880 --> 00:08:56,600
+the next hop link is the link that
+
+211
+00:08:56,600 --> 00:08:57,740
+you're going to use to get to the
+
+212
+00:08:57,740 --> 00:08:59,870
+destination the path is a sequence of
+
+213
+00:08:59,870 --> 00:09:02,360
+links so I don't want people telling me
+
+214
+00:09:02,360 --> 00:09:06,280
+that the route from B to E is whatever
+
+215
+00:09:06,280 --> 00:09:09,250
+ever it is BCE I'd like people to tell
+
+216
+00:09:09,250 --> 00:09:11,440
+me that the route act destiny node B to
+
+217
+00:09:11,440 --> 00:09:15,820
+destination e is l1 or if you wish to be
+
+218
+00:09:15,820 --> 00:09:17,720
+clear you can say it's link l1 which
+
+219
+00:09:17,720 --> 00:09:20,240
+takes it to the next hop see the path
+
+220
+00:09:20,240 --> 00:09:26,160
+from B to E might be BCE okay
+
+221
+00:09:26,160 --> 00:09:28,850
+all right so that's what the routing
+
+222
+00:09:28,850 --> 00:09:30,190
+table structure looks like and we're
+
+223
+00:09:30,190 --> 00:09:33,110
+interested in minimum cost our paths to
+
+224
+00:09:33,110 --> 00:09:36,230
+go from places to places so you know
+
+225
+00:09:36,230 --> 00:09:38,170
+normally traditionally we sit around and
+
+226
+00:09:38,170 --> 00:09:40,420
+try to now dive into protocols but I
+
+227
+00:09:40,420 --> 00:09:42,120
+think here what we're going to do is
+
+228
+00:09:42,120 --> 00:09:44,530
+since our notes are also nice and
+
+229
+00:09:44,530 --> 00:09:46,540
+written up I actually don't have to tell
+
+230
+00:09:46,540 --> 00:09:47,620
+you everything that's there so what
+
+231
+00:09:47,620 --> 00:09:48,750
+we're actually going to do is something
+
+232
+00:09:48,750 --> 00:09:52,850
+we call the routing game which is an
+
+233
+00:09:52,850 --> 00:09:55,420
+experiment in social networking like
+
+234
+00:09:55,420 --> 00:09:57,640
+what it means is that each of you or
+
+235
+00:09:57,640 --> 00:10:00,940
+some of you will act as nodes and start
+
+236
+00:10:00,940 --> 00:10:02,950
+computing routes to different
+
+237
+00:10:02,950 --> 00:10:04,970
+destinations okay so that's what this
+
+238
+00:10:04,970 --> 00:10:06,820
+game is going to be so what I have in my
+
+239
+00:10:06,820 --> 00:10:10,250
+hand is 40 slips of paper and I hope
+
+240
+00:10:10,250 --> 00:10:12,520
+there are 40 people here 40 slips of
+
+241
+00:10:12,520 --> 00:10:16,150
+paper and each of these paper slips of
+
+242
+00:10:16,150 --> 00:10:18,190
+paper has some information that looks
+
+243
+00:10:18,190 --> 00:10:25,000
+like this it says you are node X and
+
+244
+00:10:25,000 --> 00:10:28,750
+you're connected to nodes Y Z W etc okay
+
+245
+00:10:28,750 --> 00:10:31,750
+and there's a set of rules that I will
+
+246
+00:10:31,750 --> 00:10:35,020
+go through in a minute first of all
+
+247
+00:10:35,020 --> 00:10:36,520
+these were all in perfect order so I
+
+248
+00:10:36,520 --> 00:10:37,850
+need to shuffle them a few times
+
+249
+00:10:37,850 --> 00:10:39,230
+carefully without losing them
+
+250
+00:10:39,230 --> 00:10:42,230
+I think persi diaconis is famous
+
+251
+00:10:42,230 --> 00:10:43,970
+probabilistic said that you got to do
+
+252
+00:10:43,970 --> 00:10:49,220
+the seven times okay so what I'm going
+
+253
+00:10:49,220 --> 00:10:51,470
+to do is I'm gonna pass this around
+
+254
+00:10:51,470 --> 00:10:53,600
+there's no bag here the bag is
+
+255
+00:10:53,600 --> 00:10:55,190
+cumbersome so what I'd like you to do
+
+256
+00:10:55,190 --> 00:10:56,360
+actually I'll put it in the envelope and
+
+257
+00:10:56,360 --> 00:10:57,910
+pass it around just kind of close your
+
+258
+00:10:57,910 --> 00:10:59,410
+eyes or something don't look at the
+
+259
+00:10:59,410 --> 00:11:00,820
+number and just pick one up and don't
+
+260
+00:11:00,820 --> 00:11:03,370
+look at it until I tell you okay so we
+
+261
+00:11:03,370 --> 00:11:05,080
+start here and just pass it around I'd
+
+262
+00:11:05,080 --> 00:11:07,780
+like you know 40 different people to
+
+263
+00:11:07,780 --> 00:11:09,130
+have them you don't you don't have to
+
+264
+00:11:09,130 --> 00:11:10,610
+feel compelled to take it but just pass
+
+265
+00:11:10,610 --> 00:11:12,640
+it around and try to do it quickly
+
+266
+00:11:12,640 --> 00:11:14,800
+because I'd like that to happen faster
+
+267
+00:11:14,800 --> 00:11:16,030
+than the time it's going to take for us
+
+268
+00:11:16,030 --> 00:11:18,350
+to compute these routes so why don't you
+
+269
+00:11:18,350 --> 00:11:20,200
+just pick one sheet of paper up and just
+
+270
+00:11:20,200 --> 00:11:21,220
+pass it around please
+
+271
+00:11:21,220 --> 00:11:24,470
+okay so though you know I picked seven
+
+272
+00:11:24,470 --> 00:11:27,130
+minutes sometimes works a little faster
+
+273
+00:11:27,130 --> 00:11:28,270
+than seven the best that the class is
+
+274
+00:11:28,270 --> 00:11:30,810
+down is about five minutes and sometimes
+
+275
+00:11:30,810 --> 00:11:33,250
+last term they did it very quickly but
+
+276
+00:11:33,250 --> 00:11:35,640
+they got it wrong so
+
+277
+00:11:35,640 --> 00:11:37,600
+I don't think that counts but I've been
+
+278
+00:11:37,600 --> 00:11:38,740
+told that they've tried this experiment
+
+279
+00:11:38,740 --> 00:11:40,800
+Berkeley has taken usually more than
+
+280
+00:11:40,800 --> 00:11:42,690
+seven minutes and I figure MIT students
+
+281
+00:11:42,690 --> 00:11:44,670
+are smarter so let's see if you can do
+
+282
+00:11:44,670 --> 00:11:48,490
+it faster than seven minutes now your
+
+283
+00:11:48,490 --> 00:11:50,580
+job is to find a path from a source node
+
+284
+00:11:50,580 --> 00:11:52,140
+to a destination or as quickly as
+
+285
+00:11:52,140 --> 00:11:58,170
+possible okay and I mean as a bonus if
+
+286
+00:11:58,170 --> 00:11:59,400
+you actually find the path with the
+
+287
+00:11:59,400 --> 00:12:00,750
+minimum number of hops that's even
+
+288
+00:12:00,750 --> 00:12:04,890
+better but we'll take any pack now
+
+289
+00:12:04,890 --> 00:12:10,510
+there's some rules here
+
+290
+00:12:10,510 --> 00:12:12,580
+now there are some rules here so you may
+
+291
+00:12:12,580 --> 00:12:14,200
+not actually kind of get up and run
+
+292
+00:12:14,200 --> 00:12:16,220
+around and try to you know do things
+
+293
+00:12:16,220 --> 00:12:18,230
+that a normal network switch wouldn't do
+
+294
+00:12:18,230 --> 00:12:20,020
+so you're allowed to stay in one place
+
+295
+00:12:20,020 --> 00:12:23,170
+and what you're actually allowed to do
+
+296
+00:12:23,170 --> 00:12:24,910
+is you're not allowed to pass your sheet
+
+297
+00:12:24,910 --> 00:12:26,600
+of paper to other people because you
+
+298
+00:12:26,600 --> 00:12:27,760
+know you have information about yourself
+
+299
+00:12:27,760 --> 00:12:29,530
+and that piece tells you who your
+
+300
+00:12:29,530 --> 00:12:30,700
+neigh​bors are the numbers of your
+
+301
+00:12:30,700 --> 00:12:32,360
+neigh​bors so you can't actually kind of
+
+302
+00:12:32,360 --> 00:12:34,330
+copy the Ascend your piece of paper to
+
+303
+00:12:34,330 --> 00:12:36,370
+other nodes that's not allowed and don't
+
+304
+00:12:36,370 --> 00:12:37,820
+don't let people copy what's on your
+
+305
+00:12:37,820 --> 00:12:40,070
+sheet of paper now here's some things
+
+306
+00:12:40,070 --> 00:12:43,900
+you can do you can read them ask your
+
+307
+00:12:43,900 --> 00:12:45,620
+friends for advice you can shout to
+
+308
+00:12:45,620 --> 00:12:47,360
+other participants we're allowing you to
+
+309
+00:12:47,360 --> 00:12:49,820
+you know yell and scream but do so in a
+
+310
+00:12:49,820 --> 00:12:52,250
+way that's somewhat civilized and you
+
+311
+00:12:52,250 --> 00:12:53,990
+know if you can wish that you didn't
+
+312
+00:12:53,990 --> 00:12:55,250
+pick up a slip or pick up a slip or
+
+313
+00:12:55,250 --> 00:12:56,770
+whatever but you know try to act
+
+314
+00:12:56,770 --> 00:12:58,540
+generally I mean this class is recorded
+
+315
+00:12:58,540 --> 00:13:00,700
+so you know what you say might be heard
+
+316
+00:13:00,700 --> 00:13:03,550
+now if you get to sleep a slip there's
+
+317
+00:13:03,550 --> 00:13:05,530
+some ground rules you can't cheat like
+
+318
+00:13:05,530 --> 00:13:06,880
+you know we're not dealing with security
+
+319
+00:13:06,880 --> 00:13:08,770
+here's where a node that's 17 and
+
+320
+00:13:08,770 --> 00:13:11,000
+connected to 27 and 29 tells people that
+
+321
+00:13:11,000 --> 00:13:12,470
+it's 14 I mean you don't want that it's
+
+322
+00:13:12,470 --> 00:13:14,380
+hard enough to do when you tell the
+
+323
+00:13:14,380 --> 00:13:16,870
+truth so don't cheat this you know
+
+324
+00:13:16,870 --> 00:13:18,350
+there's probably a variant of this we
+
+325
+00:13:18,350 --> 00:13:19,850
+can come up with where some fraction of
+
+326
+00:13:19,850 --> 00:13:21,250
+the nodes they're adversarial and then
+
+327
+00:13:21,250 --> 00:13:23,000
+you can see if this stuff even works but
+
+328
+00:13:23,000 --> 00:13:25,270
+right now don't cheat if you've got a
+
+329
+00:13:25,270 --> 00:13:27,470
+slip you kind of have to really try to
+
+330
+00:13:27,470 --> 00:13:29,050
+participate in whatever protocol you
+
+331
+00:13:29,050 --> 00:13:31,900
+come up with and this experiment has no
+
+332
+00:13:31,900 --> 00:13:34,870
+human subjects approval
+
+333
+00:13:34,870 --> 00:13:39,390
+okay so it does um who has the envelope
+
+334
+00:13:39,390 --> 00:13:42,820
+is it empty oh my goodness at seven
+
+335
+00:13:42,820 --> 00:13:43,420
+minutes already
+
+336
+00:13:43,420 --> 00:13:50,690
+let's okay well when the envelope gets
+
+337
+00:13:50,690 --> 00:13:53,480
+empty we can start this thing so we
+
+338
+00:13:53,480 --> 00:13:54,750
+should try to move it along
+
+339
+00:13:54,750 --> 00:13:57,230
+is everyone clear on the rules what
+
+340
+00:13:57,230 --> 00:13:58,900
+you're trying to do is to find a path
+
+341
+00:13:58,900 --> 00:14:01,030
+between a node that the source node
+
+342
+00:14:01,030 --> 00:14:02,620
+which was numbered one and the
+
+343
+00:14:02,620 --> 00:14:04,000
+destination node enough that was number
+
+344
+00:14:04,000 --> 00:14:05,260
+forty the source and the destination
+
+345
+00:14:05,260 --> 00:14:07,780
+know who they each are and then we'll
+
+346
+00:14:07,780 --> 00:14:09,130
+just gonna wait this is the easiest
+
+347
+00:14:09,130 --> 00:14:10,490
+lecture to prepare for because I just
+
+348
+00:14:10,490 --> 00:14:11,520
+have to keep quiet
+
+349
+00:14:11,520 --> 00:14:15,550
+for a few minutes okay and if things all
+
+350
+00:14:15,550 --> 00:14:16,940
+work out or things don't work whatever
+
+351
+00:14:16,940 --> 00:14:18,190
+it is I'm assuming that you'll come up
+
+352
+00:14:18,190 --> 00:14:19,540
+with some variant of the reasonable
+
+353
+00:14:19,540 --> 00:14:22,370
+routing protocol and odds are it will be
+
+354
+00:14:22,370 --> 00:14:23,800
+a variant of one of the ones we're going
+
+355
+00:14:23,800 --> 00:14:26,410
+to study you know the general hero's
+
+356
+00:14:26,410 --> 00:14:27,980
+suggest if something was a reasonable
+
+357
+00:14:27,980 --> 00:14:29,990
+idea which is you go and you know you
+
+358
+00:14:29,990 --> 00:14:32,360
+you do one you tell you you know you
+
+359
+00:14:32,360 --> 00:14:34,390
+pick one neigh​bor and you go through but
+
+360
+00:14:34,390 --> 00:14:35,800
+you get stuck in a loop and then the
+
+361
+00:14:35,800 --> 00:14:37,300
+idea is you come back to where you start
+
+362
+00:14:37,300 --> 00:14:38,870
+and then you go through the next and
+
+363
+00:14:38,870 --> 00:14:41,290
+that principle could work but you gotta
+
+364
+00:14:41,290 --> 00:14:43,060
+remember a lot of stuff and tends to
+
+365
+00:14:43,060 --> 00:14:45,010
+make mistakes in fact you know this was
+
+366
+00:14:45,010 --> 00:14:46,750
+an easy Network where every node had one
+
+367
+00:14:46,750 --> 00:14:48,250
+two or three neigh​bors I mean as a few
+
+368
+00:14:48,250 --> 00:14:49,870
+with more but most of them had a small
+
+369
+00:14:49,870 --> 00:14:51,520
+number of neigh​bors what you guys were
+
+370
+00:14:51,520 --> 00:14:53,020
+going after was a sort of better plan
+
+371
+00:14:53,020 --> 00:14:54,070
+which is everybody yells out the
+
+372
+00:14:54,070 --> 00:14:55,610
+neigh​bors and the day as yell out their
+
+373
+00:14:55,610 --> 00:14:57,110
+neigh​bors and their neigh​bors and so
+
+374
+00:14:57,110 --> 00:14:58,970
+forth and that particular protocol has a
+
+375
+00:14:58,970 --> 00:15:00,640
+nice name to it it's called link state
+
+376
+00:15:00,640 --> 00:15:04,290
+routing where you broadcast and flood
+
+377
+00:15:04,290 --> 00:15:07,750
+your own neigh​bor information okay
+
+378
+00:15:07,750 --> 00:15:09,700
+that's the second of the two protocols
+
+379
+00:15:09,700 --> 00:15:11,320
+we're going to study what you were
+
+380
+00:15:11,320 --> 00:15:12,760
+trying to go after was a link state
+
+381
+00:15:12,760 --> 00:15:14,840
+routing
+
+382
+00:15:14,840 --> 00:15:18,880
+now the first protocol we're gonna study
+
+383
+00:15:18,880 --> 00:15:20,530
+has a different name to it it's called
+
+384
+00:15:20,530 --> 00:15:25,330
+distance vector re
+
+385
+00:15:25,330 --> 00:15:28,490
+and these are the two routing protocols
+
+386
+00:15:28,490 --> 00:15:31,120
+we're going to study almost all routing
+
+387
+00:15:31,120 --> 00:15:32,770
+protocols and practice are variants of
+
+388
+00:15:32,770 --> 00:15:35,410
+either a vector protocol or one of these
+
+389
+00:15:35,410 --> 00:15:36,830
+link-state protocols there's lots of
+
+390
+00:15:36,830 --> 00:15:39,910
+variants but these cover and there's
+
+391
+00:15:39,910 --> 00:15:41,500
+hundreds of routing protocols but these
+
+392
+00:15:41,500 --> 00:15:45,640
+cover the main concepts so let me tell
+
+393
+00:15:45,640 --> 00:15:47,360
+you how this is our distance vector
+
+394
+00:15:47,360 --> 00:15:49,580
+protocol or how the vector protocols
+
+395
+00:15:49,580 --> 00:15:51,440
+works they're a little different from
+
+396
+00:15:51,440 --> 00:15:53,570
+the kind of approach you were going
+
+397
+00:15:53,570 --> 00:15:56,620
+after in solving this problem had you
+
+398
+00:15:56,620 --> 00:15:59,650
+gone after an approach where you started
+
+399
+00:15:59,650 --> 00:16:03,880
+at the destination at 40 and 40 simply
+
+400
+00:16:03,880 --> 00:16:08,170
+said I'm 40 and then the neigh​bors next
+
+401
+00:16:08,170 --> 00:16:11,750
+to 40 then said I'm connected to 40 to
+
+402
+00:16:11,750 --> 00:16:14,480
+get to 40 come through me and the cost
+
+403
+00:16:14,480 --> 00:16:16,970
+is let's say whatever the cost of their
+
+404
+00:16:16,970 --> 00:16:20,330
+link to 40 is right then now initially
+
+405
+00:16:20,330 --> 00:16:23,240
+nodes only knew about themselves but now
+
+406
+00:16:23,240 --> 00:16:24,710
+you have a destination and you have a
+
+407
+00:16:24,710 --> 00:16:25,900
+set of nodes connected to the
+
+408
+00:16:25,900 --> 00:16:30,790
+destination let's call these nodes let's
+
+409
+00:16:30,790 --> 00:16:35,540
+just say n1 n2 and n3
+
+410
+00:16:35,540 --> 00:16:38,740
+initially the only thing that D says is
+
+411
+00:16:38,740 --> 00:16:41,250
+I'm D and it says back to its neigh​bors
+
+412
+00:16:41,250 --> 00:16:47,370
+along these links the same has a name to
+
+413
+00:16:47,370 --> 00:16:53,390
+it it's in it's an advertisement now
+
+414
+00:16:53,390 --> 00:16:56,980
+when anyone hears about destination D it
+
+415
+00:16:56,980 --> 00:17:01,620
+can do the same thing to its neigh​bors
+
+416
+00:17:01,620 --> 00:17:06,390
+so let's say these are n4 and n5 here
+
+417
+00:17:06,390 --> 00:17:09,690
+what n1 can do is to say that to get to
+
+418
+00:17:09,690 --> 00:17:12,420
+D let's imagine that this cost here is 6
+
+419
+00:17:12,420 --> 00:17:15,970
+so D says I'm D and the cost to get to
+
+420
+00:17:15,970 --> 00:17:20,250
+me is 0 because I'm D n1 says here's
+
+421
+00:17:20,250 --> 00:17:23,700
+that and it says I'm n1 that's true but
+
+422
+00:17:23,700 --> 00:17:26,250
+to get to D come through me and the cost
+
+423
+00:17:26,250 --> 00:17:28,150
+is 6 so it now puts out advertisements
+
+424
+00:17:28,150 --> 00:17:38,910
+along these links but it says D : 6 6 6
+
+425
+00:17:38,910 --> 00:17:42,530
+where 6 is the cost of that link
+
+426
+00:17:42,530 --> 00:17:44,160
+and now let's imagine that you know
+
+427
+00:17:44,160 --> 00:17:45,660
+these other links have cost so let's say
+
+428
+00:17:45,660 --> 00:17:47,940
+this link has a cost of eight this link
+
+429
+00:17:47,940 --> 00:17:50,400
+has a cost of two let's say this link
+
+430
+00:17:50,400 --> 00:17:57,590
+has a cost of 9 so the link cost is
+
+431
+00:17:57,590 --> 00:17:59,190
+eight the link cost is nine and the link
+
+432
+00:17:59,190 --> 00:18:01,280
+cost is two and let's say for a minute
+
+433
+00:18:01,280 --> 00:18:03,080
+here that this cost of this link is
+
+434
+00:18:03,080 --> 00:18:07,500
+there now n1 advertises to everybody
+
+435
+00:18:07,500 --> 00:18:11,940
+saying to get 2d the cost is six to get
+
+436
+00:18:11,940 --> 00:18:13,790
+2d the cost to six and they get to get
+
+437
+00:18:13,790 --> 00:18:15,960
+2d the cost of six each of those guys
+
+438
+00:18:15,960 --> 00:18:18,420
+when they get this information now know
+
+439
+00:18:18,420 --> 00:18:23,600
+that they can get a route to destination
+
+440
+00:18:23,600 --> 00:18:26,190
+D because now and for now is that if it
+
+441
+00:18:26,190 --> 00:18:29,700
+used this link to get 2d the cost would
+
+442
+00:18:29,700 --> 00:18:33,240
+be six plus the cost of that link so
+
+443
+00:18:33,240 --> 00:18:35,810
+it's 14 so it would have a routing table
+
+444
+00:18:35,810 --> 00:18:39,450
+entry that says D is a cost 14 and of
+
+445
+00:18:39,450 --> 00:18:40,820
+course the routing table entry would
+
+446
+00:18:40,820 --> 00:18:42,830
+have an entry saying this is the link
+
+447
+00:18:42,830 --> 00:18:47,250
+that it should use similarly n5 here
+
+448
+00:18:47,250 --> 00:18:52,230
+would take destination D and say that
+
+449
+00:18:52,230 --> 00:18:55,520
+the cost to destination D is 9 plus the
+
+450
+00:18:55,520 --> 00:18:57,770
+advertisement which was 6 and so it
+
+451
+00:18:57,770 --> 00:19:02,640
+would say D is 15 and n 2 which
+
+452
+00:19:02,640 --> 00:19:04,310
+previously had her out today which was
+
+453
+00:19:04,310 --> 00:19:07,230
+this link that cost 10 would look at
+
+454
+00:19:07,230 --> 00:19:09,990
+this new advertisement coming in here
+
+455
+00:19:09,990 --> 00:19:13,170
+saying that the cost on this from n1 is
+
+456
+00:19:13,170 --> 00:19:16,380
+6 add that cost to the cost of the link
+
+457
+00:19:16,380 --> 00:19:20,220
+which is 2 and have now a different way
+
+458
+00:19:20,220 --> 00:19:23,090
+to get to D whose cost is 8 and compared
+
+459
+00:19:23,090 --> 00:19:24,990
+that cost against the cost a previously
+
+460
+00:19:24,990 --> 00:19:27,770
+held to the destination D and because
+
+461
+00:19:27,770 --> 00:19:29,250
+we're interested in minimum cost routing
+
+462
+00:19:29,250 --> 00:19:32,350
+8 smaller than 10 so n 2 would
+
+463
+00:19:32,350 --> 00:19:34,610
+previously which had previously had a
+
+464
+00:19:34,610 --> 00:19:37,140
+cost to destination D of 10 would throw
+
+465
+00:19:37,140 --> 00:19:38,600
+that route out
+
+466
+00:19:38,600 --> 00:19:41,270
+replace it with a route the destination
+
+467
+00:19:41,270 --> 00:19:44,810
+D going along this link with the cost of
+
+468
+00:19:44,810 --> 00:19:48,720
+now eight which is smaller than ten and
+
+469
+00:19:48,720 --> 00:19:50,540
+this process just continues through as
+
+470
+00:19:50,540 --> 00:19:53,460
+it goes along so you might end up in a
+
+471
+00:19:53,460 --> 00:19:55,100
+situation quite easily as we just went
+
+472
+00:19:55,100 --> 00:19:56,880
+through here well let's say n 3 will
+
+473
+00:19:56,880 --> 00:19:59,330
+connected to n 5 if this link had a cost
+
+474
+00:19:59,330 --> 00:20:01,890
+of 1 in this link at a cost of 4 what
+
+475
+00:20:01,890 --> 00:20:03,960
+would eventually happen is that n 5
+
+476
+00:20:03,960 --> 00:20:06,000
+which ended up with the cost of 15 to go
+
+477
+00:20:06,000 --> 00:20:07,790
+like that would when it here's an
+
+478
+00:20:07,790 --> 00:20:09,990
+advertisement from this node replace
+
+479
+00:20:09,990 --> 00:20:12,770
+that route with a cost of 4 and use this
+
+480
+00:20:12,770 --> 00:20:15,080
+link as its route to get to get the
+
+481
+00:20:15,080 --> 00:20:16,790
+destination D and this process just
+
+482
+00:20:16,790 --> 00:20:19,910
+continues until everybody has initially
+
+483
+00:20:19,910 --> 00:20:22,410
+some route to D and then if the process
+
+484
+00:20:22,410 --> 00:20:24,660
+continues a little bit longer everybody
+
+485
+00:20:24,660 --> 00:20:28,470
+will have a minimum cost route to D this
+
+486
+00:20:28,470 --> 00:20:31,540
+step where nodes evaluate an
+
+487
+00:20:31,540 --> 00:20:34,310
+advertisement that they hear about a
+
+488
+00:20:34,310 --> 00:20:36,630
+destination against their current route
+
+489
+00:20:36,630 --> 00:20:38,400
+and the current cost to the destination
+
+490
+00:20:38,400 --> 00:20:43,280
+and replace it if they end up finding a
+
+491
+00:20:43,280 --> 00:20:45,530
+route with smaller cost or an
+
+492
+00:20:45,530 --> 00:20:48,920
+advertisement with smaller cost when you
+
+493
+00:20:48,920 --> 00:20:50,460
+the cost you have to compare is the cost
+
+494
+00:20:50,460 --> 00:20:52,340
+of the advertisement plus the cost of
+
+495
+00:20:52,340 --> 00:20:54,630
+the link along which that advertisement
+
+496
+00:20:54,630 --> 00:20:56,810
+came and you compare that cost against
+
+497
+00:20:56,810 --> 00:20:58,100
+the cost of the route you already hold
+
+498
+00:20:58,100 --> 00:21:01,640
+if it's smaller you replace it that
+
+499
+00:21:01,640 --> 00:21:03,750
+algorithm is called the bellman-ford
+
+500
+00:21:03,750 --> 00:21:04,960
+algorithm
+
+501
+00:21:04,960 --> 00:21:07,890
+and you might have seen centralized
+
+502
+00:21:07,890 --> 00:21:10,150
+implementations of shortest path routing
+
+503
+00:21:10,150 --> 00:21:13,290
+using this algorithm and if you have it
+
+504
+00:21:13,290 --> 00:21:14,760
+actually turns out it's a little less
+
+505
+00:21:14,760 --> 00:21:16,480
+efficient than other algorithm another
+
+506
+00:21:16,480 --> 00:21:18,060
+one we'll study called Dijkstra's if
+
+507
+00:21:18,060 --> 00:21:19,990
+you're doing it centralized but it's
+
+508
+00:21:19,990 --> 00:21:21,460
+very very elegant elegant for
+
+509
+00:21:21,460 --> 00:21:24,490
+distributed computation because the
+
+510
+00:21:24,490 --> 00:21:26,010
+routes to different destinations are
+
+511
+00:21:26,010 --> 00:21:27,190
+being computed in a completely
+
+512
+00:21:27,190 --> 00:21:30,130
+distributed way these nodes far away
+
+513
+00:21:30,130 --> 00:21:32,250
+here have no idea what the network
+
+514
+00:21:32,250 --> 00:21:34,480
+topology looks like they couldn't even
+
+515
+00:21:34,480 --> 00:21:35,850
+reconstruct the network topology the
+
+516
+00:21:35,850 --> 00:21:37,240
+best they could do is to find their own
+
+517
+00:21:37,240 --> 00:21:39,060
+way to get you know their link to use
+
+518
+00:21:39,060 --> 00:21:41,310
+the only information they have is what
+
+519
+00:21:41,310 --> 00:21:43,420
+they hear from their neigh​bors but yet
+
+520
+00:21:43,420 --> 00:21:45,750
+they're able to find an answer because
+
+521
+00:21:45,750 --> 00:21:47,610
+all they have to do is to listen to all
+
+522
+00:21:47,610 --> 00:21:50,100
+their neigh​bors and among the set of
+
+523
+00:21:50,100 --> 00:21:54,000
+neigh​bors pick that neigh​bor whose
+
+524
+00:21:54,000 --> 00:21:56,890
+advertise cost plus the cost of the link
+
+525
+00:21:56,890 --> 00:21:58,800
+to that neigh​bor is minimum across all
+
+526
+00:21:58,800 --> 00:22:01,260
+of the neigh​bors so the computation
+
+527
+00:22:01,260 --> 00:22:03,160
+that's being done is a very simple
+
+528
+00:22:03,160 --> 00:22:04,860
+computation very elegant computation
+
+529
+00:22:04,860 --> 00:22:07,590
+which is the main over all of the
+
+530
+00:22:07,590 --> 00:22:11,740
+neigh​bors of the link cost lij plus the
+
+531
+00:22:11,740 --> 00:22:15,090
+advertised cost from j where the minimum
+
+532
+00:22:15,090 --> 00:22:17,440
+has gone over all are all j where j is
+
+533
+00:22:17,440 --> 00:22:23,410
+the set of neigh​bors so you minimize
+
+534
+00:22:23,410 --> 00:22:25,210
+over the set of the neigh​bors each node
+
+535
+00:22:25,210 --> 00:22:26,820
+I does this you minimize over the set of
+
+536
+00:22:26,820 --> 00:22:30,750
+neigh​bors J of I the link cost from I to
+
+537
+00:22:30,750 --> 00:22:33,880
+J plus the advertised past to
+
+538
+00:22:33,880 --> 00:22:37,660
+destination D of J and take the minimum
+
+539
+00:22:37,660 --> 00:22:39,810
+cost that's the minimum cost and then
+
+540
+00:22:39,810 --> 00:22:41,410
+you take the link corresponding to that
+
+541
+00:22:41,410 --> 00:22:42,640
+neigh​bor and that's the route that you
+
+542
+00:22:42,640 --> 00:22:46,100
+use
+
+543
+00:22:46,100 --> 00:22:48,900
+now this algorithm gets more complicated
+
+544
+00:22:48,900 --> 00:22:50,310
+and tricky to argue that it's correct
+
+545
+00:22:50,310 --> 00:22:51,570
+when there are failures but today there
+
+546
+00:22:51,570 --> 00:22:56,310
+are no failures there's some other
+
+547
+00:22:56,310 --> 00:22:57,810
+wrinkles in the algorithm which is I
+
+548
+00:22:57,810 --> 00:23:00,940
+mentioned that you know what are the
+
+549
+00:23:00,940 --> 00:23:02,760
+conditions under which a link node
+
+550
+00:23:02,760 --> 00:23:06,400
+changes its route to a destination so I
+
+551
+00:23:06,400 --> 00:23:09,130
+went through one rule I I mentioned a
+
+552
+00:23:09,130 --> 00:23:11,610
+rule that said if the current copy if
+
+553
+00:23:11,610 --> 00:23:12,570
+the current route to the destination
+
+554
+00:23:12,570 --> 00:23:15,360
+does not exist in which case the cost is
+
+555
+00:23:15,360 --> 00:23:19,210
+assumed to be infinity or if the current
+
+556
+00:23:19,210 --> 00:23:22,110
+cost to the destination is smaller than
+
+557
+00:23:22,110 --> 00:23:24,270
+the cost of the advertisement plus the
+
+558
+00:23:24,270 --> 00:23:25,960
+cost of the link along which the
+
+559
+00:23:25,960 --> 00:23:28,590
+advertisement came then you replace the
+
+560
+00:23:28,590 --> 00:23:31,170
+route to the destination but there's
+
+561
+00:23:31,170 --> 00:23:32,610
+actually one other condition under which
+
+562
+00:23:32,610 --> 00:23:33,880
+you should replace the route to the
+
+563
+00:23:33,880 --> 00:23:42,150
+destination
+
+564
+00:23:42,150 --> 00:23:44,270
+if it's equal well technically you don't
+
+565
+00:23:44,270 --> 00:23:45,800
+have to replace it you still have a good
+
+566
+00:23:45,800 --> 00:23:46,550
+pad right
+
+567
+00:23:46,550 --> 00:23:48,080
+you could replace it but it doesn't
+
+568
+00:23:48,080 --> 00:23:50,300
+matter there might be a case where you
+
+569
+00:23:50,300 --> 00:23:53,030
+have to replace the link the route when
+
+570
+00:23:53,030 --> 00:23:57,380
+and when in fact the cost increases
+
+571
+00:23:57,380 --> 00:24:00,100
+there might be a case where you hear a
+
+572
+00:24:00,100 --> 00:24:02,510
+you you have a current cost to the
+
+573
+00:24:02,510 --> 00:24:05,250
+destination and some current route to
+
+574
+00:24:05,250 --> 00:24:06,320
+the destination and you hear an
+
+575
+00:24:06,320 --> 00:24:07,400
+advertisement and you take that
+
+576
+00:24:07,400 --> 00:24:09,000
+advertisement and you add the link cost
+
+577
+00:24:09,000 --> 00:24:10,760
+and you find a bigger number and you
+
+578
+00:24:10,760 --> 00:24:23,600
+might sometimes have to replace it yes
+
+579
+00:24:23,600 --> 00:24:25,650
+right it could be that what's going on
+
+580
+00:24:25,650 --> 00:24:28,380
+here is that the cost to the destination
+
+581
+00:24:28,380 --> 00:24:30,450
+you know a link I might I previously
+
+582
+00:24:30,450 --> 00:24:32,270
+told you that my cost to the destination
+
+583
+00:24:32,270 --> 00:24:34,100
+is 17 and now I've changed my mind I
+
+584
+00:24:34,100 --> 00:24:36,390
+tell you that it's actually 19 and I
+
+585
+00:24:36,390 --> 00:24:37,740
+could change my mind for a variety of
+
+586
+00:24:37,740 --> 00:24:38,970
+reasons usually having to do with
+
+587
+00:24:38,970 --> 00:24:40,310
+failure so I guess this is a little bit
+
+588
+00:24:40,310 --> 00:24:41,600
+of a cheating question because I told
+
+589
+00:24:41,600 --> 00:24:43,850
+you there's no failures but it could be
+
+590
+00:24:43,850 --> 00:24:47,160
+that perhaps you know the cost of a link
+
+591
+00:24:47,160 --> 00:24:48,860
+changed because it became more expensive
+
+592
+00:24:48,860 --> 00:24:50,670
+or something like that and that's the
+
+593
+00:24:50,670 --> 00:24:52,340
+only subtle case you have to worry about
+
+594
+00:24:52,340 --> 00:24:54,560
+where a cost of only the advertisement
+
+595
+00:24:54,560 --> 00:24:57,530
+could could increase and if that cost
+
+596
+00:24:57,530 --> 00:25:00,240
+increases along your current route like
+
+597
+00:25:00,240 --> 00:25:01,500
+you think that the route to the
+
+598
+00:25:01,500 --> 00:25:04,230
+destination is 17 the cost is 17 but in
+
+599
+00:25:04,230 --> 00:25:06,420
+fact it turns out to be you know 24
+
+600
+00:25:06,420 --> 00:25:08,190
+that's the time when you have to change
+
+601
+00:25:08,190 --> 00:25:09,530
+your entry in the routing table you have
+
+602
+00:25:09,530 --> 00:25:11,030
+to change the cost associated with it
+
+603
+00:25:11,030 --> 00:25:14,270
+but otherwise it's basically that's the
+
+604
+00:25:14,270 --> 00:25:17,750
+algorithm and it's summarized over in
+
+605
+00:25:17,750 --> 00:25:19,520
+this in the stable I in this chart here
+
+606
+00:25:19,520 --> 00:25:21,930
+and I've gone through pretty much all of
+
+607
+00:25:21,930 --> 00:25:29,200
+it does anyone have any questions
+
+608
+00:25:29,200 --> 00:25:32,410
+no questions
+
+609
+00:25:32,410 --> 00:25:36,040
+how long does it take before every node
+
+610
+00:25:36,040 --> 00:25:38,110
+in the network actually before I get to
+
+611
+00:25:38,110 --> 00:25:39,880
+that the reason it's called a vector
+
+612
+00:25:39,880 --> 00:25:42,200
+protocol is I showed you a picture for
+
+613
+00:25:42,200 --> 00:25:45,340
+one destination but in fact each switch
+
+614
+00:25:45,340 --> 00:25:46,870
+or each node does it for all
+
+615
+00:25:46,870 --> 00:25:49,700
+destinations so the general form of a
+
+616
+00:25:49,700 --> 00:25:54,370
+distance vector advertisement looks like
+
+617
+00:25:54,370 --> 00:25:58,810
+this it has a destination destination 1
+
+618
+00:25:58,810 --> 00:26:04,650
+: cost one destination to Poland cost to
+
+619
+00:26:04,650 --> 00:26:07,970
+destination 3 : cost 3 and so forth for
+
+620
+00:26:07,970 --> 00:26:09,610
+all the destinations to which you have a
+
+621
+00:26:09,610 --> 00:26:12,610
+cost and initially when you start you
+
+622
+00:26:12,610 --> 00:26:13,780
+don't know about all of any of the other
+
+623
+00:26:13,780 --> 00:26:15,280
+nodes if you have a route to some
+
+624
+00:26:15,280 --> 00:26:17,620
+destination in general then there's some
+
+625
+00:26:17,620 --> 00:26:19,480
+cost associated with it if you know
+
+626
+00:26:19,480 --> 00:26:21,230
+about a destination but have no route to
+
+627
+00:26:21,230 --> 00:26:21,520
+it
+
+628
+00:26:21,520 --> 00:26:24,910
+the cost is infinity it'll turn out next
+
+629
+00:26:24,910 --> 00:26:26,560
+week will find that the value of
+
+630
+00:26:26,560 --> 00:26:27,850
+infinity in this network has to be
+
+631
+00:26:27,850 --> 00:26:30,730
+pretty small but that's because the
+
+632
+00:26:30,730 --> 00:26:32,320
+sarvam is not the world's best algorithm
+
+633
+00:26:32,320 --> 00:26:34,510
+for big networks and I'll explain why
+
+634
+00:26:34,510 --> 00:26:37,800
+infinity has to be a small number but
+
+635
+00:26:37,800 --> 00:26:39,640
+theoretically we can assume it's
+
+636
+00:26:39,640 --> 00:26:40,830
+infinite
+
+637
+00:26:40,830 --> 00:26:43,300
+the reason it's called a vector protocol
+
+638
+00:26:43,300 --> 00:26:45,230
+is because the advertisements are a
+
+639
+00:26:45,230 --> 00:26:47,860
+vector of this destination cost tuples
+
+640
+00:26:47,860 --> 00:26:50,290
+and so you send these tuples around and
+
+641
+00:26:50,290 --> 00:26:51,910
+this is a vector of these tuples and
+
+642
+00:26:51,910 --> 00:26:53,350
+hence this is called a vector protocol
+
+643
+00:26:53,350 --> 00:26:55,030
+it really should be called cost vector
+
+644
+00:26:55,030 --> 00:26:57,370
+protocol but initially they ran this
+
+645
+00:26:57,370 --> 00:26:59,140
+thing where all of the links had cost of
+
+646
+00:26:59,140 --> 00:27:00,670
+one where and therefore they were
+
+647
+00:27:00,670 --> 00:27:02,560
+minimizing distance and the name stuck
+
+648
+00:27:02,560 --> 00:27:05,080
+but if we wanted to be perfectly precise
+
+649
+00:27:05,080 --> 00:27:06,760
+we would say cost vector but then no one
+
+650
+00:27:06,760 --> 00:27:08,050
+else in the world would understand what
+
+651
+00:27:08,050 --> 00:27:11,770
+you meant so we say distance vector okay
+
+652
+00:27:11,770 --> 00:27:15,580
+any questions all right how long does it
+
+653
+00:27:15,580 --> 00:27:17,260
+take before every node in the network
+
+654
+00:27:17,260 --> 00:27:19,510
+for some destination how long does it
+
+655
+00:27:19,510 --> 00:27:20,590
+take before every node in the network
+
+656
+00:27:20,590 --> 00:27:24,470
+has a route to that destination where by
+
+657
+00:27:24,470 --> 00:27:26,960
+how long I mean how many advertisement
+
+658
+00:27:26,960 --> 00:27:28,240
+cycles do you have to go through how
+
+659
+00:27:28,240 --> 00:27:30,010
+many how many of these advertisements
+
+660
+00:27:30,010 --> 00:27:32,110
+like initially let's say that the way
+
+661
+00:27:32,110 --> 00:27:33,950
+our world is going to work is initially
+
+662
+00:27:33,950 --> 00:27:36,100
+every node advertises its own
+
+663
+00:27:36,100 --> 00:27:38,690
+advertisement to itself then at the next
+
+664
+00:27:38,690 --> 00:27:40,330
+time step every node advertises their
+
+665
+00:27:40,330 --> 00:27:42,250
+arts that it knows about and then it
+
+666
+00:27:42,250 --> 00:27:44,080
+does that periodically so let's say that
+
+667
+00:27:44,080 --> 00:27:47,050
+every T seconds a node sends out an
+
+668
+00:27:47,050 --> 00:27:48,520
+advertisement where an advertisement
+
+669
+00:27:48,520 --> 00:27:51,490
+basically contains this tuple of this
+
+670
+00:27:51,490 --> 00:27:53,740
+the spec vector of tuples for all of the
+
+671
+00:27:53,740 --> 00:27:56,080
+destination it knows about right so let
+
+672
+00:27:56,080 --> 00:27:57,550
+me explain this protocol again and then
+
+673
+00:27:57,550 --> 00:28:00,610
+I'll ask you the question the protocol
+
+674
+00:28:00,610 --> 00:28:08,010
+is very simple every T seconds
+
+675
+00:28:08,010 --> 00:28:10,490
+what what the nodes doing is looking at
+
+676
+00:28:10,490 --> 00:28:12,790
+two columns in the thriving table it's
+
+677
+00:28:12,790 --> 00:28:14,150
+looking at the destination column and
+
+678
+00:28:14,150 --> 00:28:16,400
+the cost column and it's just taking
+
+679
+00:28:16,400 --> 00:28:18,280
+that information out and it sends out an
+
+680
+00:28:18,280 --> 00:28:24,650
+advertisement the distance okay every T
+
+681
+00:28:24,650 --> 00:28:27,610
+seconds how long does it take now let's
+
+682
+00:28:27,610 --> 00:28:30,100
+focus on one destination D some
+
+683
+00:28:30,100 --> 00:28:31,510
+destination D in the network and you
+
+684
+00:28:31,510 --> 00:28:33,520
+have some network how long does it take
+
+685
+00:28:33,520 --> 00:28:36,040
+before every node has some route to the
+
+686
+00:28:36,040 --> 00:28:43,490
+destination yes up to the number of
+
+687
+00:28:43,490 --> 00:28:48,100
+edges in my network all right so let's
+
+688
+00:28:48,100 --> 00:28:49,300
+say you have a network that looks like
+
+689
+00:28:49,300 --> 00:28:55,530
+this
+
+690
+00:28:55,530 --> 00:28:57,630
+how long does it take before every node
+
+691
+00:28:57,630 --> 00:29:03,920
+has a route to destination be there for
+
+692
+00:29:03,920 --> 00:29:06,240
+well I'm asking for an answer that holds
+
+693
+00:29:06,240 --> 00:29:10,740
+for all networks not for sure in the
+
+694
+00:29:10,740 --> 00:29:16,290
+worst case it could well yes in the
+
+695
+00:29:16,290 --> 00:29:17,950
+absolute worst case it is true that
+
+696
+00:29:17,950 --> 00:29:20,010
+it'll always take time smaller than the
+
+697
+00:29:20,010 --> 00:29:21,090
+number of edges in the network but you
+
+698
+00:29:21,090 --> 00:29:23,490
+can come up with a much better bound so
+
+699
+00:29:23,490 --> 00:29:29,250
+let's try to come up yes sir longest
+
+700
+00:29:29,250 --> 00:29:32,040
+length chain so that's not completely to
+
+701
+00:29:32,040 --> 00:29:33,480
+the longest what kind of longest length
+
+702
+00:29:33,480 --> 00:29:35,070
+because you could have a really so
+
+703
+00:29:35,070 --> 00:29:37,470
+another counter example let's say that I
+
+704
+00:29:37,470 --> 00:29:40,590
+have this network the longest length
+
+705
+00:29:40,590 --> 00:29:44,160
+chain is 1 2 3 4 5 6 but yet you guys
+
+706
+00:29:44,160 --> 00:29:45,660
+just told me that in one shot you get
+
+707
+00:29:45,660 --> 00:29:49,140
+the answer so you have to clarify what
+
+708
+00:29:49,140 --> 00:29:50,820
+you meant a little bit you're almost
+
+709
+00:29:50,820 --> 00:29:53,640
+right
+
+710
+00:29:53,640 --> 00:30:02,490
+I said find a path or find a route not
+
+711
+00:30:02,490 --> 00:30:06,210
+the best route how long does it take to
+
+712
+00:30:06,210 --> 00:30:07,670
+find a route and network you said this
+
+713
+00:30:07,670 --> 00:30:10,070
+almost the longest path but it's not
+
+714
+00:30:10,070 --> 00:30:11,600
+quite the longest path it's the longest
+
+715
+00:30:11,600 --> 00:30:14,590
+something bad yes
+
+716
+00:30:14,590 --> 00:30:17,360
+the longest shortest path that is the
+
+717
+00:30:17,360 --> 00:30:19,100
+longest path with the minimum number of
+
+718
+00:30:19,100 --> 00:30:21,050
+the longest path when you compute the
+
+719
+00:30:21,050 --> 00:30:22,670
+longest overall paths with a minimum
+
+720
+00:30:22,670 --> 00:30:24,420
+number of hops between one place to
+
+721
+00:30:24,420 --> 00:30:25,670
+another that's also called the diameter
+
+722
+00:30:25,670 --> 00:30:31,520
+of the network okay yes yes okay all
+
+723
+00:30:31,520 --> 00:30:33,560
+right now that's the time it takes a
+
+724
+00:30:33,560 --> 00:30:35,880
+multiply by T and I might be off by one
+
+725
+00:30:35,880 --> 00:30:37,910
+you know it's one minus that minus one
+
+726
+00:30:37,910 --> 00:30:39,450
+actually it's not it is the number of
+
+727
+00:30:39,450 --> 00:30:43,280
+hops along the longest shortest path now
+
+728
+00:30:43,280 --> 00:30:47,210
+how long does it take to find the
+
+729
+00:30:47,210 --> 00:30:51,350
+minimum cost path - there - to some
+
+730
+00:30:51,350 --> 00:30:58,160
+destination D at all of the nodes
+
+731
+00:30:58,160 --> 00:31:01,500
+what
+
+732
+00:31:01,500 --> 00:31:03,720
+three times no that's that's true that
+
+733
+00:31:03,720 --> 00:31:04,790
+you can find it within that oh that's
+
+734
+00:31:04,790 --> 00:31:08,700
+too long so I'm gonna come back to this
+
+735
+00:31:08,700 --> 00:31:10,950
+question it's probably answered in my in
+
+736
+00:31:10,950 --> 00:31:14,000
+one of the chilla too in chapter 18 I
+
+737
+00:31:14,000 --> 00:31:15,750
+think but we'll come back to that next
+
+738
+00:31:15,750 --> 00:31:16,850
+time it'll become a little bit clearer
+
+739
+00:31:16,850 --> 00:31:18,320
+but you should think about it there's a
+
+740
+00:31:18,320 --> 00:31:19,850
+nice succinct answer to this question
+
+741
+00:31:19,850 --> 00:31:21,960
+and generally speaking in every quiz
+
+742
+00:31:21,960 --> 00:31:23,600
+there's some variant of this question so
+
+743
+00:31:23,600 --> 00:31:25,520
+you know it's not explicit but there's
+
+744
+00:31:25,520 --> 00:31:27,240
+some story that looked wise if yes you
+
+745
+00:31:27,240 --> 00:31:27,960
+have an answer
+
+746
+00:31:27,960 --> 00:31:30,590
+oh you do okay I'll come back to that
+
+747
+00:31:30,590 --> 00:31:36,560
+question next time but yes yeah I can go
+
+748
+00:31:36,560 --> 00:31:47,710
+over that so let's say you have here
+
+749
+00:31:47,710 --> 00:31:50,290
+you look at this destination beam and
+
+750
+00:31:50,290 --> 00:31:53,770
+you look at from every node what's the
+
+751
+00:31:53,770 --> 00:31:55,410
+path with the smallest number of hops
+
+752
+00:31:55,410 --> 00:31:57,790
+number of hops not cost path with the
+
+753
+00:31:57,790 --> 00:31:59,150
+smallest number of hops to get to that
+
+754
+00:31:59,150 --> 00:32:02,210
+destination right so this guy it's one
+
+755
+00:32:02,210 --> 00:32:05,080
+two three four this guy it's one two
+
+756
+00:32:05,080 --> 00:32:08,750
+three etc whatever that biggest number
+
+757
+00:32:08,750 --> 00:32:12,100
+is multiplied by T is the answer that's
+
+758
+00:32:12,100 --> 00:32:15,410
+how long it takes before every node here
+
+759
+00:32:15,410 --> 00:32:17,390
+some pack but it's not quite the right
+
+760
+00:32:17,390 --> 00:32:19,660
+answer for the best path because as you
+
+761
+00:32:19,660 --> 00:32:23,170
+saw in this example here it took us one
+
+762
+00:32:23,170 --> 00:32:25,970
+step before n to God a proud to the
+
+763
+00:32:25,970 --> 00:32:27,710
+destination but it took us two time
+
+764
+00:32:27,710 --> 00:32:30,070
+steps before it got its best route to
+
+765
+00:32:30,070 --> 00:32:31,730
+the destination and the reason was that
+
+766
+00:32:31,730 --> 00:32:33,980
+has something to do with the length of
+
+767
+00:32:33,980 --> 00:32:37,600
+the minimum cost path right because in
+
+768
+00:32:37,600 --> 00:32:38,860
+this case the length of the minimum cost
+
+769
+00:32:38,860 --> 00:32:40,540
+path is two plus six eight it took two
+
+770
+00:32:40,540 --> 00:32:43,190
+hops which is different from the length
+
+771
+00:32:43,190 --> 00:32:45,280
+of some shortest hop path which was one
+
+772
+00:32:45,280 --> 00:32:47,860
+half so if I look at this picture and to
+
+773
+00:32:47,860 --> 00:32:49,330
+here's about some route to the
+
+774
+00:32:49,330 --> 00:32:51,310
+destination in the first advertisement
+
+775
+00:32:51,310 --> 00:32:53,900
+but then to find its best route to the
+
+776
+00:32:53,900 --> 00:32:56,450
+destination requires us to actually wait
+
+777
+00:32:56,450 --> 00:32:59,000
+around until we find this two plus six
+
+778
+00:32:59,000 --> 00:33:01,460
+path which took two hops so it's a
+
+779
+00:33:01,460 --> 00:33:03,410
+little longer but it's not like
+
+780
+00:33:03,410 --> 00:33:04,970
+enormously long it's just a little bit
+
+781
+00:33:04,970 --> 00:33:07,510
+longer and the answer of course depends
+
+782
+00:33:07,510 --> 00:33:08,900
+on in the worst case it could be quite
+
+783
+00:33:08,900 --> 00:33:11,660
+long but it depends on the number of
+
+784
+00:33:11,660 --> 00:33:14,690
+hops along the minimum cost path and if
+
+785
+00:33:14,690 --> 00:33:16,460
+you minimize that quantity you find the
+
+786
+00:33:16,460 --> 00:33:19,130
+answer to the question how long does it
+
+787
+00:33:19,130 --> 00:33:20,720
+take before every node finds the minimum
+
+788
+00:33:20,720 --> 00:33:22,660
+cost path to the destination
+
+789
+00:33:22,660 --> 00:33:26,610
+okay is that clear any questions about
+
+790
+00:33:26,610 --> 00:33:33,510
+distance-vector crystal fear okay we'll
+
+791
+00:33:33,510 --> 00:33:35,490
+see when the lab comes around
+
+792
+00:33:35,490 --> 00:33:38,040
+it is crystal everybody really really
+
+793
+00:33:38,040 --> 00:33:39,540
+does well in the slide in these labs
+
+794
+00:33:39,540 --> 00:33:41,140
+it's a lot of fun hacking the stuff up
+
+795
+00:33:41,140 --> 00:33:44,520
+so your Olympic medals and you'll
+
+796
+00:33:44,520 --> 00:33:45,840
+actually look at all sorts of failures
+
+797
+00:33:45,840 --> 00:33:48,160
+and it'll just be sometimes miraculous
+
+798
+00:33:48,160 --> 00:33:49,390
+that it actually works even when you
+
+799
+00:33:49,390 --> 00:33:52,390
+didn't consider some failure cases okay
+
+800
+00:33:52,390 --> 00:33:53,710
+now I'm going to talk about link state
+
+801
+00:33:53,710 --> 00:33:56,070
+routing and this is the routing protocol
+
+802
+00:33:56,070 --> 00:33:57,780
+that you guys were sort of attempting to
+
+803
+00:33:57,780 --> 00:34:00,660
+implement attempting to come up with
+
+804
+00:34:00,660 --> 00:34:03,780
+this is a radically different approach
+
+805
+00:34:03,780 --> 00:34:06,540
+from the vector protocols in a vector
+
+806
+00:34:06,540 --> 00:34:09,420
+protocol everybody advertises for each
+
+807
+00:34:09,420 --> 00:34:12,300
+destination a vector of tuples where
+
+808
+00:34:12,300 --> 00:34:15,550
+it's the destination and the cost in a
+
+809
+00:34:15,550 --> 00:34:17,640
+link state protocol we don't do that the
+
+810
+00:34:17,640 --> 00:34:18,820
+link state protocol
+
+811
+00:34:18,820 --> 00:34:21,250
+does not compute in a distributed way in
+
+812
+00:34:21,250 --> 00:34:22,960
+a link state protocol every node just
+
+813
+00:34:22,960 --> 00:34:25,400
+says I am node 17 and I am connected to
+
+814
+00:34:25,400 --> 00:34:29,590
+1645 and 44 and the cost of my link to
+
+815
+00:34:29,590 --> 00:34:32,940
+16 is 7 the cost of my link to 45 is
+
+816
+00:34:32,940 --> 00:34:35,160
+something and the cost of my link to
+
+817
+00:34:35,160 --> 00:34:37,030
+this other neigh​bor that I have is
+
+818
+00:34:37,030 --> 00:34:37,620
+something else
+
+819
+00:34:37,620 --> 00:34:40,840
+so every node advertises what I've shown
+
+820
+00:34:40,840 --> 00:34:43,300
+up on the slide every node advertises a
+
+821
+00:34:43,300 --> 00:34:46,620
+neigh​bor it's immediate neigh​bor and the
+
+822
+00:34:46,620 --> 00:34:50,860
+link cost to that neigh​bor okay in
+
+823
+00:34:50,860 --> 00:34:52,750
+addition in each of these link state
+
+824
+00:34:52,750 --> 00:34:54,820
+advertisements there is a sequence
+
+825
+00:34:54,820 --> 00:34:56,530
+number the sequence number starts at
+
+826
+00:34:56,530 --> 00:34:58,510
+some initial value like say zero and
+
+827
+00:34:58,510 --> 00:35:01,110
+every time one of these link-state
+
+828
+00:35:01,110 --> 00:35:03,030
+advertisements is sent and that's done
+
+829
+00:35:03,030 --> 00:35:04,960
+periodically as well every T seconds
+
+830
+00:35:04,960 --> 00:35:06,840
+every time you send a link state
+
+831
+00:35:06,840 --> 00:35:08,400
+advertisement you increment the sequence
+
+832
+00:35:08,400 --> 00:35:09,960
+number by one
+
+833
+00:35:09,960 --> 00:35:13,210
+now here's the key step the key step
+
+834
+00:35:13,210 --> 00:35:18,730
+here is that when a node receives if I
+
+835
+00:35:18,730 --> 00:35:20,400
+receive a link state advertisement from
+
+836
+00:35:20,400 --> 00:35:23,420
+you I just send that to my neigh​bors and
+
+837
+00:35:23,420 --> 00:35:26,230
+then my neigh​bors will send it to their
+
+838
+00:35:26,230 --> 00:35:28,320
+neigh​bors and so on so it's a very this
+
+839
+00:35:28,320 --> 00:35:31,780
+nice flooding protocol every node sends
+
+840
+00:35:31,780 --> 00:35:33,900
+out its link state advertisement and
+
+841
+00:35:33,900 --> 00:35:36,460
+every neigh​bor that receives it
+
+842
+00:35:36,460 --> 00:35:38,820
+processes that and then turns around and
+
+843
+00:35:38,820 --> 00:35:41,310
+ships it to their neigh​bors and they do
+
+844
+00:35:41,310 --> 00:35:42,960
+the same thing to their neigh​bors and so
+
+845
+00:35:42,960 --> 00:35:45,840
+forth now when this flooding process
+
+846
+00:35:45,840 --> 00:35:47,580
+completes and every node is originating
+
+847
+00:35:47,580 --> 00:35:49,260
+its own link-state advertisements so
+
+848
+00:35:49,260 --> 00:35:51,210
+you're telling them you know your
+
+849
+00:35:51,210 --> 00:35:52,800
+neigh​bors who you're connected to she's
+
+850
+00:35:52,800 --> 00:35:54,300
+telling her neigh​bors who she's
+
+851
+00:35:54,300 --> 00:35:56,540
+connected to and we all do that and
+
+852
+00:35:56,540 --> 00:35:58,630
+we're all doing this in parallel it's
+
+853
+00:35:58,630 --> 00:35:59,790
+all happening at the same time and all
+
+854
+00:35:59,790 --> 00:36:01,320
+our neigh​bors are rebroadcasting this
+
+855
+00:36:01,320 --> 00:36:04,280
+and eventually every nodes going to get
+
+856
+00:36:04,280 --> 00:36:07,290
+one or more copies of every link state
+
+857
+00:36:07,290 --> 00:36:09,330
+advertisement which means that every
+
+858
+00:36:09,330 --> 00:36:10,960
+node can now construct an entire map of
+
+859
+00:36:10,960 --> 00:36:13,170
+the network every node can construct
+
+860
+00:36:13,170 --> 00:36:15,960
+this entire graph and once they
+
+861
+00:36:15,960 --> 00:36:17,460
+construct that graph every node can
+
+862
+00:36:17,460 --> 00:36:19,080
+implement some shortest path routing
+
+863
+00:36:19,080 --> 00:36:21,760
+protocol to compute the paths over that
+
+864
+00:36:21,760 --> 00:36:23,980
+graph this is very different from the
+
+865
+00:36:23,980 --> 00:36:25,630
+previous protocol in vector routing
+
+866
+00:36:25,630 --> 00:36:27,460
+protocols the nodes actually have no
+
+867
+00:36:27,460 --> 00:36:29,010
+idea what the topology of the network is
+
+868
+00:36:29,010 --> 00:36:31,110
+all they know is and they trust what the
+
+869
+00:36:31,110 --> 00:36:34,630
+neigh​bors tell them here every node has
+
+870
+00:36:34,630 --> 00:36:37,150
+complete knowledge under the basic model
+
+871
+00:36:37,150 --> 00:36:38,440
+every node has complete knowledge of the
+
+872
+00:36:38,440 --> 00:36:42,400
+overall network topology so let me show
+
+873
+00:36:42,400 --> 00:36:44,650
+this by example
+
+874
+00:36:44,650 --> 00:36:46,610
+become completely clear so let's imagine
+
+875
+00:36:46,610 --> 00:36:48,380
+that this is what the network looks like
+
+876
+00:36:48,380 --> 00:36:51,050
+and you start I'm going to show you a
+
+877
+00:36:51,050 --> 00:36:55,280
+picture of no death no deaf originates
+
+878
+00:36:55,280 --> 00:36:57,500
+its initial link-state advertisements a
+
+879
+00:36:57,500 --> 00:36:59,260
+day Iseman it increments the sequence
+
+880
+00:36:59,260 --> 00:37:02,480
+number by one and it says I am connected
+
+881
+00:37:02,480 --> 00:37:06,280
+to G with no G with a cost of eight and
+
+882
+00:37:06,280 --> 00:37:08,030
+the node C with a cost of two and it
+
+883
+00:37:08,030 --> 00:37:10,630
+spits it out to its neigh​bors each of
+
+884
+00:37:10,630 --> 00:37:11,920
+those neigh​bors turns around and does
+
+885
+00:37:11,920 --> 00:37:14,480
+the same thing you rebroadcast a
+
+886
+00:37:14,480 --> 00:37:16,780
+link-state advertisement along the links
+
+887
+00:37:16,780 --> 00:37:19,250
+that you're connected to and they
+
+888
+00:37:19,250 --> 00:37:20,920
+rebroadcast it and so forth and
+
+889
+00:37:20,920 --> 00:37:22,940
+eventually be get said and he broadcasts
+
+890
+00:37:22,940 --> 00:37:23,980
+it too though it was completely useless
+
+891
+00:37:23,980 --> 00:37:27,280
+to do so well not completely packets are
+
+892
+00:37:27,280 --> 00:37:30,010
+lost it's pretty useful anyway when this
+
+893
+00:37:30,010 --> 00:37:32,320
+flooding completes which takes you know
+
+894
+00:37:32,320 --> 00:37:35,920
+some number of steps every node now has
+
+895
+00:37:35,920 --> 00:37:37,480
+at least one if no packets are lost
+
+896
+00:37:37,480 --> 00:37:39,500
+every node has a bunch of copies of this
+
+897
+00:37:39,500 --> 00:37:41,360
+link state advertisement if packets can
+
+898
+00:37:41,360 --> 00:37:43,480
+get lost as long as the loss rates are
+
+899
+00:37:43,480 --> 00:37:46,400
+not you know enormous every node might
+
+900
+00:37:46,400 --> 00:37:48,670
+have one copy of a link state
+
+901
+00:37:48,670 --> 00:37:50,260
+advertisement and now every node
+
+902
+00:37:50,260 --> 00:37:51,670
+originates its own link-state
+
+903
+00:37:51,670 --> 00:37:53,840
+advertisements and therefore they end up
+
+904
+00:37:53,840 --> 00:37:56,480
+with a map of the network by the way why
+
+905
+00:37:56,480 --> 00:37:58,010
+do we have the sequence number in the
+
+906
+00:37:58,010 --> 00:38:03,070
+link state advertisement
+
+907
+00:38:03,070 --> 00:38:13,760
+yes
+
+908
+00:38:13,760 --> 00:38:17,440
+yes that is one of the two reasons why
+
+909
+00:38:17,440 --> 00:38:18,850
+you have it that's actually the second
+
+910
+00:38:18,850 --> 00:38:20,210
+reason the main reason you have and
+
+911
+00:38:20,210 --> 00:38:21,550
+that's a valid reason but the main
+
+912
+00:38:21,550 --> 00:38:24,730
+reason you have it is that if si gets a
+
+913
+00:38:24,730 --> 00:38:26,590
+link-state advertisement originating
+
+914
+00:38:26,590 --> 00:38:29,050
+from F with sequence number 17 and then
+
+915
+00:38:29,050 --> 00:38:31,860
+eventually C is also going to get D
+
+916
+00:38:31,860 --> 00:38:33,320
+rebroadcasting that link-state
+
+917
+00:38:33,320 --> 00:38:35,650
+advertisements ends it this way but F
+
+918
+00:38:35,650 --> 00:38:37,630
+also sends it this way and that goes up
+
+919
+00:38:37,630 --> 00:38:39,440
+here and that comes down here and then D
+
+920
+00:38:39,440 --> 00:38:41,480
+rebroadcast said C needs a way of
+
+921
+00:38:41,480 --> 00:38:42,610
+telling whether this link-state
+
+922
+00:38:42,610 --> 00:38:45,340
+advertisement is new or old right and
+
+923
+00:38:45,340 --> 00:38:47,590
+the way it tells if it's new or old is
+
+924
+00:38:47,590 --> 00:38:49,420
+it considers the link-state
+
+925
+00:38:49,420 --> 00:38:52,150
+advertisements bigger than the last
+
+926
+00:38:52,150 --> 00:38:54,960
+sequence number it received from that
+
+927
+00:38:54,960 --> 00:38:58,150
+origin so now every note has a map of
+
+928
+00:38:58,150 --> 00:39:00,850
+the network and now we run this
+
+929
+00:39:00,850 --> 00:39:02,630
+integration step where we actually take
+
+930
+00:39:02,630 --> 00:39:04,130
+this map of the network and we find
+
+931
+00:39:04,130 --> 00:39:06,230
+shortest paths to the network I need a
+
+932
+00:39:06,230 --> 00:39:07,420
+show of hands how many people know how
+
+933
+00:39:07,420 --> 00:39:09,980
+Dijkstra's algorithm works from how many
+
+934
+00:39:09,980 --> 00:39:12,530
+people don't know how it works all right
+
+935
+00:39:12,530 --> 00:39:14,000
+what I'm going to do is it's described
+
+936
+00:39:14,000 --> 00:39:15,170
+very well in the notes we've talked
+
+937
+00:39:15,170 --> 00:39:16,510
+about in recitation tomorrow but I'm
+
+938
+00:39:16,510 --> 00:39:18,850
+going to show it by example and then
+
+939
+00:39:18,850 --> 00:39:20,350
+we'll come back to this again on Monday
+
+940
+00:39:20,350 --> 00:39:21,880
+but I'm going to tell you this now
+
+941
+00:39:21,880 --> 00:39:23,380
+because you kind of need it for the lab
+
+942
+00:39:23,380 --> 00:39:25,360
+and it is just that very well in the
+
+943
+00:39:25,360 --> 00:39:26,380
+readings and we'll do it in recitation
+
+944
+00:39:26,380 --> 00:39:29,000
+as well so here's how it works let's
+
+945
+00:39:29,000 --> 00:39:31,420
+imagine we want to find paths from a to
+
+946
+00:39:31,420 --> 00:39:33,250
+all of the other nodes in the network
+
+947
+00:39:33,250 --> 00:39:36,440
+now initially a doesn't know paths to
+
+948
+00:39:36,440 --> 00:39:38,800
+anyone except for itself but what a nose
+
+949
+00:39:38,800 --> 00:39:40,940
+is this map of the network and what is
+
+950
+00:39:40,940 --> 00:39:42,800
+trying to do is to find routes to all
+
+951
+00:39:42,800 --> 00:39:45,670
+the other destinations the way does that
+
+952
+00:39:45,670 --> 00:39:48,500
+is it keeps building up in non
+
+953
+00:39:48,500 --> 00:39:50,750
+decreasing order of the cost of the
+
+954
+00:39:50,750 --> 00:39:52,600
+minimum cost path to the destination it
+
+955
+00:39:52,600 --> 00:39:54,820
+starts building up information about the
+
+956
+00:39:54,820 --> 00:39:56,320
+routes to the different destination so
+
+957
+00:39:56,320 --> 00:39:57,730
+initially it looks
+
+958
+00:39:57,730 --> 00:39:59,500
+the stable and it says it's connected to
+
+959
+00:39:59,500 --> 00:40:01,780
+C and it's connected to B with a cost of
+
+960
+00:40:01,780 --> 00:40:03,940
+six so what it does is it says all right
+
+961
+00:40:03,940 --> 00:40:05,880
+among all of the people out here I'm
+
+962
+00:40:05,880 --> 00:40:08,590
+going to pull in the person with the
+
+963
+00:40:08,590 --> 00:40:10,980
+minimum that minimum cost path and it
+
+964
+00:40:10,980 --> 00:40:13,090
+might pick in this case it might just
+
+965
+00:40:13,090 --> 00:40:15,570
+pick the node C because between C and B
+
+966
+00:40:15,570 --> 00:40:17,530
+it doesn't matter which one it takes now
+
+967
+00:40:17,530 --> 00:40:19,440
+the cost to all of the other guys is
+
+968
+00:40:19,440 --> 00:40:23,650
+considered to be infinity so it has
+
+969
+00:40:23,650 --> 00:40:25,980
+costs of six and six so it pulls in one
+
+970
+00:40:25,980 --> 00:40:27,940
+of them by without loss of generality it
+
+971
+00:40:27,940 --> 00:40:29,710
+just picks one of them and now it has
+
+972
+00:40:29,710 --> 00:40:31,690
+cost to both of them and it says that
+
+973
+00:40:31,690 --> 00:40:34,210
+the route from a itself at a the route
+
+974
+00:40:34,210 --> 00:40:38,010
+to see is this link what it then does is
+
+975
+00:40:38,010 --> 00:40:39,340
+it goes and looks at all of the
+
+976
+00:40:39,340 --> 00:40:41,400
+neigh​bors connected to a and C and in
+
+977
+00:40:41,400 --> 00:40:42,820
+fact it only has to look at the New
+
+978
+00:40:42,820 --> 00:40:44,820
+Nordic pulled in and it has to adjust
+
+979
+00:40:44,820 --> 00:40:47,500
+the cost of the minimum cost path to the
+
+980
+00:40:47,500 --> 00:40:49,710
+destination that's connected to that in
+
+981
+00:40:49,710 --> 00:40:52,260
+this case it adjusts from infinity it
+
+982
+00:40:52,260 --> 00:40:54,510
+brings down the cost to be to 13 because
+
+983
+00:40:54,510 --> 00:40:56,980
+it knows that it can get to C is 6 6
+
+984
+00:40:56,980 --> 00:40:59,550
+plus 7 is 13 similarly it does that for
+
+985
+00:40:59,550 --> 00:41:02,800
+e at 10 and then it does that to F at 8
+
+986
+00:41:02,800 --> 00:41:07,210
+so now it has costs of 66.6 is already
+
+987
+00:41:07,210 --> 00:41:11,010
+in 6 13 10 and 8 and infinity so now it
+
+988
+00:41:11,010 --> 00:41:12,600
+has to decide what node to pull in next
+
+989
+00:41:12,600 --> 00:41:15,070
+and it pulls in the node with the
+
+990
+00:41:15,070 --> 00:41:17,100
+minimum cost among the costs that you
+
+991
+00:41:17,100 --> 00:41:19,210
+have so far and that's this node over
+
+992
+00:41:19,210 --> 00:41:23,100
+here so it pulls that in if my wireless
+
+993
+00:41:23,100 --> 00:41:26,610
+works there we go and then once it pulls
+
+994
+00:41:26,610 --> 00:41:28,590
+that in it adjusts the route to that to
+
+995
+00:41:28,590 --> 00:41:30,760
+be the green link and then it goes ahead
+
+996
+00:41:30,760 --> 00:41:33,070
+and looks at the neigh​bors of B and it
+
+997
+00:41:33,070 --> 00:41:35,340
+adjusts the shortest path cost in this
+
+998
+00:41:35,340 --> 00:41:38,670
+case that 13 now becomes 11 because 6
+
+999
+00:41:38,670 --> 00:41:40,840
+plus 5 going through B is shorter than 6
+
+1000
+00:41:40,840 --> 00:41:42,820
+plus 7 going through C
+
+1001
+00:41:42,820 --> 00:41:44,630
+and now it repeats it pulls down the
+
+1002
+00:41:44,630 --> 00:41:46,510
+minimum the minimum of this case is 8 it
+
+1003
+00:41:46,510 --> 00:41:49,280
+pulls in F makes that be the route to F
+
+1004
+00:41:49,280 --> 00:41:51,920
+now the route to F is not that link the
+
+1005
+00:41:51,920 --> 00:41:54,130
+route to F is in fact this link at the
+
+1006
+00:41:54,130 --> 00:41:56,110
+routing table but it knows that because
+
+1007
+00:41:56,110 --> 00:41:58,070
+it knows that F is connected to C and
+
+1008
+00:41:58,070 --> 00:42:00,710
+therefore the route to F is equal to the
+
+1009
+00:42:00,710 --> 00:42:02,480
+route to the parent which is C's
+
+1010
+00:42:02,480 --> 00:42:04,480
+therefore in the throttle table entry it
+
+1011
+00:42:04,480 --> 00:42:06,460
+makes the route to FB that link which is
+
+1012
+00:42:06,460 --> 00:42:08,800
+exactly the link to C so that's the
+
+1013
+00:42:08,800 --> 00:42:10,190
+subtlety you have to keep in mind when
+
+1014
+00:42:10,190 --> 00:42:12,920
+you implement this stuff in the lab it
+
+1015
+00:42:12,920 --> 00:42:14,800
+goes ahead and adjust that to 16 it now
+
+1016
+00:42:14,800 --> 00:42:17,820
+pulls the minimum which will be 10 and
+
+1017
+00:42:17,820 --> 00:42:20,090
+then adjusts the cost of the guys
+
+1018
+00:42:20,090 --> 00:42:23,230
+connected to it so D becomes D changes
+
+1019
+00:42:23,230 --> 00:42:26,000
+to 10 and then it now goes ahead and
+
+1020
+00:42:26,000 --> 00:42:27,550
+pulls the minimum in in this case it's
+
+1021
+00:42:27,550 --> 00:42:32,320
+12 its D with a cost of 10 that's the
+
+1022
+00:42:32,320 --> 00:42:35,110
+link to use and that link there for the
+
+1023
+00:42:35,110 --> 00:42:36,980
+route to D is the same as there are two
+
+1024
+00:42:36,980 --> 00:42:38,420
+e there are two E's the same as there
+
+1025
+00:42:38,420 --> 00:42:40,820
+are two C which is that link and now you
+
+1026
+00:42:40,820 --> 00:42:42,800
+finally conclude the algorithm by
+
+1027
+00:42:42,800 --> 00:42:47,320
+getting that last node here so I'm going
+
+1028
+00:42:47,320 --> 00:42:48,940
+to stop here that was Dijkstra's
+
+1029
+00:42:48,940 --> 00:42:50,650
+algorithm and the two routing protocols
+
+1030
+00:42:50,650 --> 00:42:52,040
+we will pick it up in recitation
+
